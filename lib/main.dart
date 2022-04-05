@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './providers/notes.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => Notes(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final notesData = context.watch<Notes>();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -18,8 +27,8 @@ class MyApp extends StatelessWidget {
           title: const Text('Your notes'),
         ),
         body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: ((ctx, index) => const Text('start')),
+          itemCount: notesData.items.length,
+          itemBuilder: ((ctx, index) => Text(notesData.items.single.text)),
         ),
       ),
     );
