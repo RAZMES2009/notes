@@ -1,5 +1,5 @@
 class Note {
-  String id;
+  DateTime id;
   String text;
   DateTime time;
   bool pinned;
