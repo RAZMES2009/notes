@@ -8,7 +8,7 @@ class DBHelper {
       join(dbPath, 'notes.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE notes(id DATETIME PRIMARY KEY, text TEXT, time DATETIME, pin BOOL');
+            'CREATE TABLE notes(id STRING, text TEXT, time STRING, pin INTEGER)');
       },
       version: 1,
     );
