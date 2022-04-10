@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../icon/pin_icons.dart';
 
 import './large_card.dart';
 import './two_cards.dart';
 import './small_card.dart';
 import '../../providers/notes.dart';
 
-class BuldNotes extends StatelessWidget {
+class BuldNotes extends StatefulWidget {
   const BuldNotes({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<BuldNotes> createState() => _BuldNotesState();
+}
+
+class _BuldNotesState extends State<BuldNotes> {
   @override
   Widget build(BuildContext context) {
     var indexShortItem = 0;
