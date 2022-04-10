@@ -26,6 +26,12 @@ class MainScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.add),
             ),
+            IconButton(
+              onPressed: () {
+                Notes().deleteAllNotes();
+              },
+              icon: const Icon(Icons.delete),
+            ),
           ],
         ),
         body: const BuldNotes(),

@@ -27,4 +27,9 @@ class DBHelper {
     final db = await DBHelper.database();
     return db.query(table);
   }
+
+  static Future<void> clearDb() async {
+    final db = await DBHelper.database();
+    db.delete('notes');
+  }
 }

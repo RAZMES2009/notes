@@ -25,7 +25,7 @@ class Notes with ChangeNotifier {
       'notes',
       {
         'id': time.toIso8601String(),
-        'text': 'Buy coffee',
+        'text': 'Buy hqw',
         'time': time.toIso8601String(),
         'pin': 0,
       },
@@ -46,5 +46,14 @@ class Notes with ChangeNotifier {
         )
         .toList();
     notifyListeners();
+  }
+
+  Future<void> deleteAllNotes() async {
+    _items.clear();
+    DBHelper.clearDb();
+  }
+
+  Iterable<Note> shortItem() {
+    return _items.where((el) => el.text.length < 10);
   }
 }
