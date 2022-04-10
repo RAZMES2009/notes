@@ -16,16 +16,16 @@ class Notes with ChangeNotifier {
     return [..._items];
   }
 
-  void addNote() {
+  void addNote(String? text) {
     var time = DateTime.now();
     _items.add(
-      Note(id: time, text: 'Buy coffee', time: time),
+      Note(id: time, text: text.toString(), time: time),
     );
     DBHelper.insert(
       'notes',
       {
         'id': time.toIso8601String(),
-        'text': 'Buy hqw',
+        'text': text.toString(),
         'time': time.toIso8601String(),
         'pin': 0,
       },
