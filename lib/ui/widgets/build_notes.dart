@@ -16,57 +16,62 @@ class BuldNotes extends StatefulWidget {
 }
 
 class _BuldNotesState extends State<BuldNotes> {
+  var prevIndex;
   @override
   Widget build(BuildContext context) {
-    var indexShortItem = 0;
-
-    Widget buildSmallCards(var shortItemLength, var currentItem) {
-      if (indexShortItem < shortItemLength - 1) {
-        final mediumCard = TwoCards(index: indexShortItem);
-        indexShortItem += 2;
-        return mediumCard;
-      } else if (indexShortItem + 1 == shortItemLength) {
-        return Row(
-          children: [
-            SmallCard(currentItem: currentItem),
-            const SizedBox(),
-          ],
-        );
-      } else {
-        return const SizedBox();
-      }
-    }
-
     final mediaQuerySize = MediaQuery.of(context).size;
     var existsIdNotes = [];
     return FutureBuilder(
       future: Provider.of<Notes>(context, listen: false).fetchData(),
-      builder: (context, snapshot) => snapshot.connectionState ==
-              ConnectionState.waiting
-          ? Center(
-              child: SizedBox(
-                  width: mediaQuerySize.width * 0.8,
-                  child: const LinearProgressIndicator()),
-            )
-          : Consumer<Notes>(
-              child: const Center(
-                child: Text('No one note yet, start adding some!'),
-              ),
-              builder: (ctx, notesData, ch) => notesData.items.isEmpty
-                  ? ch!
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: ListView.builder(
-                        itemCount: notesData.items.length,
-                        itemBuilder: ((c, index) {
-                          existsIdNotes.add(notesData.items[index].id);
-                          return notesData.items[index].text.length > 9
-                              ? LargeCard(currentItem: notesData.items[index])
-                              : buildSmallCards(notesData.shortItem().length,
-                                  notesData.items[index]);
-                        }),
-                      ),
-                    )),
+      builder: (context, snapshot) =>
+          snapshot.connectionState == ConnectionState.waiting
+              ? Center(
+                  child: SizedBox(
+                      width: mediaQuerySize.width * 0.8,
+                      child: const LinearProgressIndicator()),
+                )
+              : Consumer<Notes>(
+                  child: const Center(
+                    child: Text('No one note yet, start adding some!'),
+                  ),
+                  builder: (ctx, notesData, ch) => notesData.items.isEmpty
+                      ? ch!
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: ListView.builder(
+                            itemCount: notesData.items.length,
+                            itemBuilder: ((c, index) {
+                              existsIdNotes.add(notesData.items[index].id);
+                              return buildTwoCards(notesData, index);
+                            }),
+                          ),
+                        )),
     );
+  }
+
+  Widget buildTwoCards(Notes notesData, int index) {
+    if (prevIndex != index) {
+      if (notesData.items.length > 1) {
+        for (var i = index + 1; i < notesData.items.length; i++) {
+          if (notesData.items[i].text.length < 10) {
+            prevIndex = i;
+            return TwoCards(
+              firstItemIndex: index,
+              secondItemIndex: i,
+            );
+          } else {
+            return LargeCard(currentItem: notesData.items[index]);
+          }
+        }
+      } else {
+        return notesData.items[index].text.length > 9
+            ? LargeCard(currentItem: notesData.items[index])
+            : SmallCard(currentItem: notesData.items[index]);
+      }
+    }
+    if (notesData.items.length.isOdd && prevIndex != index) {
+      return SmallCard(currentItem: notesData.items[index]);
+    }
+    return const SizedBox();
   }
 }

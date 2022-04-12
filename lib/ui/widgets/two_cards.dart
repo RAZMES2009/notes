@@ -5,16 +5,17 @@ import '../../icon/pin_icons.dart';
 import '../../providers/notes.dart';
 
 class TwoCards extends StatelessWidget {
-  int index;
+  int firstItemIndex;
+  int secondItemIndex;
   TwoCards({
     Key? key,
-    required this.index,
+    required this.firstItemIndex,
+    required this.secondItemIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final notesData = context.watch<Notes>();
-    final allShortItem = notesData.shortItem();
     return Row(
       children: [
         SizedBox(
@@ -26,7 +27,7 @@ class TwoCards extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Text(allShortItem.elementAt(index).text),
+                Text(notesData.items[firstItemIndex].text),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
@@ -47,7 +48,7 @@ class TwoCards extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Text(allShortItem.elementAt(index + 1).text),
+                Text(notesData.items[secondItemIndex].text),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(

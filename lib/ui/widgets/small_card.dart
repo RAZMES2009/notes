@@ -11,26 +11,31 @@ class SmallCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 162,
-      height: 140,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Row(
-          children: [
-            Text(currentItem.text),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                PinIcons.my_pin_outlined,
-                size: 15,
-              ),
+    return Row(
+      children: [
+        SizedBox(
+          width: 162,
+          height: 140,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(11),
             ),
-          ],
+            child: Row(
+              children: [
+                Text(currentItem.text),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    PinIcons.my_pin_outlined,
+                    size: 15,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+        const SizedBox(),
+      ],
     );
   }
 }

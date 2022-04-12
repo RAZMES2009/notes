@@ -4,13 +4,7 @@ import '../models/note.dart';
 import '../helpers/db_helper.dart';
 
 class Notes with ChangeNotifier {
-  List<Note> _items = [
-    // Note(
-    //   id: DateTime.now(),
-    //   text: 'Buy milk',
-    //   time: DateTime.now(),
-    // ),
-  ];
+  List<Note> _items = [];
 
   List<Note> get items {
     return [..._items];
@@ -53,7 +47,7 @@ class Notes with ChangeNotifier {
     DBHelper.clearDb();
   }
 
-  Iterable<Note> shortItem() {
+  Iterable<Note> listLargeNotes(String largeNote) {
     return _items.where((el) => el.text.length < 10);
   }
 }

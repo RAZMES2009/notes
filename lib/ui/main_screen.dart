@@ -90,6 +90,8 @@ class MyFAB extends StatelessWidget {
                           if (value!.isNotEmpty) {
                             Provider.of<Notes>(context, listen: false)
                                 .addNote(value);
+                            Provider.of<Notes>(context, listen: false)
+                                .fetchData();
                           }
                           Navigator.pop(context);
                         },
@@ -102,6 +104,8 @@ class MyFAB extends StatelessWidget {
                           if (inputTextController.text.isNotEmpty) {
                             Provider.of<Notes>(context, listen: false)
                                 .addNote(inputTextController.text);
+                            Provider.of<Notes>(context, listen: false)
+                                .fetchData();
                           }
                           Navigator.pop(context);
                         },
