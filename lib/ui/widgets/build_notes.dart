@@ -23,33 +23,35 @@ class _BuldNotesState extends State<BuldNotes> {
     var existsIdNotes = [];
     return FutureBuilder(
       future: Provider.of<Notes>(context, listen: false).fetchData(),
-      builder: (context, snapshot) =>
-          snapshot.connectionState == ConnectionState.waiting
-              ? Center(
-                  child: SizedBox(
-                      width: mediaQuerySize.width * 0.8,
-                      child: const LinearProgressIndicator()),
-                )
-              : Consumer<Notes>(
-                  child: const Center(
-                    child: Text('No one note yet, start adding some!'),
-                  ),
-                  builder: (ctx, notesData, ch) => notesData.items.isEmpty
-                      ? ch!
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            itemCount: notesData.items.length,
-                            itemBuilder: ((c, index) {
-                              existsIdNotes.add(notesData.items[index].id);
-                              return buildTwoCards(notesData, index);
-                            }),
-                          ),
-                        )),
+      builder: (context, snapshot) => snapshot.connectionState ==
+              ConnectionState.waiting
+          ? Center(
+              child: SizedBox(
+                  width: mediaQuerySize.width * 0.8,
+                  child: const LinearProgressIndicator()),
+            )
+          : Consumer<Notes>(
+              child: const Center(
+                child: Text('No one note yet, start adding some!'),
+              ),
+              builder: (ctx, notesData, ch) => notesData.items.isEmpty
+                  ? ch!
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: ListView.builder(
+                        itemCount: notesData.items.length,
+                        itemBuilder: ((c, index) {
+                          existsIdNotes.add(notesData.items[index].id);
+                          return notesData.items[index].text.length > 9
+                              ? LargeCard(currentItem: notesData.items[index])
+                              : buildCard(notesData, index);
+                        }),
+                      ),
+                    )),
     );
   }
 
-  Widget buildTwoCards(Notes notesData, int index) {
+  Widget buildCard(Notes notesData, int index) {
     if (prevIndex != index) {
       if (notesData.items.length > 1) {
         for (var i = index + 1; i < notesData.items.length; i++) {
@@ -59,14 +61,10 @@ class _BuldNotesState extends State<BuldNotes> {
               firstItemIndex: index,
               secondItemIndex: i,
             );
-          } else {
-            return LargeCard(currentItem: notesData.items[index]);
           }
         }
       } else {
-        return notesData.items[index].text.length > 9
-            ? LargeCard(currentItem: notesData.items[index])
-            : SmallCard(currentItem: notesData.items[index]);
+        return SmallCard(currentItem: notesData.items[index]);
       }
     }
     if (notesData.items.length.isOdd && prevIndex != index) {
