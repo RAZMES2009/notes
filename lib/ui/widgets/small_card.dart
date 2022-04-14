@@ -11,31 +11,40 @@ class SmallCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 162,
-          height: 140,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: Row(
-              children: [
-                Text(currentItem.text),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    PinIcons.my_pin_outlined,
-                    size: 15,
-                  ),
+    final mediaQuerySize = MediaQuery.of(context).size;
+    return SizedBox(
+      width: mediaQuerySize.width * 0.52,
+      height: mediaQuerySize.height * 0.18,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(11),
+        ),
+        color: currentItem.color == 0
+            ? Theme.of(context).colorScheme.secondary
+            : Theme.of(context).colorScheme.tertiary,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                currentItem.text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
                 ),
-              ],
-            ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  PinIcons.my_pin_outlined,
+                  size: 15,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(),
-      ],
+      ),
     );
   }
 }

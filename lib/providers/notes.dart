@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/note.dart';
@@ -10,10 +12,15 @@ class Notes with ChangeNotifier {
     return [..._items];
   }
 
-  void addNote(String? text) {
-    var time = DateTime.now();
+  void addNote(String text) {
+    final time = DateTime.now();
+    final randNum = Random().nextInt(2);
     _items.add(
-      Note(id: time, text: text.toString(), time: time),
+      Note(
+          id: time,
+          text: text.toString(),
+          time: time,
+          color: randNum),
     );
     DBHelper.insert(
       'notes',
@@ -22,6 +29,7 @@ class Notes with ChangeNotifier {
         'text': text.toString(),
         'time': time.toIso8601String(),
         'pin': 0,
+        'color': randNum,
       },
     );
     notifyListeners();
@@ -36,6 +44,7 @@ class Notes with ChangeNotifier {
             text: item['text'],
             time: DateTime.tryParse(item['time'])!,
             pinned: item['pin'] == 0 ? false : true,
+            color: item['color'],
           ),
         )
         .toList();

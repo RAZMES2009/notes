@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './large_card.dart';
-import './two_cards.dart';
+import 'note_card.dart';
 import './small_card.dart';
 import '../../providers/notes.dart';
 
@@ -16,11 +16,9 @@ class BuldNotes extends StatefulWidget {
 }
 
 class _BuldNotesState extends State<BuldNotes> {
-  var prevIndex;
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
-    var existsIdNotes = [];
     return FutureBuilder(
       future: Provider.of<Notes>(context, listen: false).fetchData(),
       builder: (context, snapshot) => snapshot.connectionState ==
@@ -38,38 +36,21 @@ class _BuldNotesState extends State<BuldNotes> {
                   ? ch!
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: ListView.builder(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: 9 / 7,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10),
                         itemCount: notesData.items.length,
                         itemBuilder: ((c, index) {
-                          existsIdNotes.add(notesData.items[index].id);
-                          return notesData.items[index].text.length > 9
-                              ? LargeCard(currentItem: notesData.items[index])
-                              : buildCard(notesData, index);
+                          return NoteCard(
+                            currentItem: notesData.items[index],
+                          );
                         }),
                       ),
                     )),
     );
-  }
-
-  Widget buildCard(Notes notesData, int index) {
-    if (prevIndex != index) {
-      if (notesData.items.length > 1) {
-        for (var i = index + 1; i < notesData.items.length; i++) {
-          if (notesData.items[i].text.length < 10) {
-            prevIndex = i;
-            return TwoCards(
-              firstItemIndex: index,
-              secondItemIndex: i,
-            );
-          }
-        }
-      } else {
-        return SmallCard(currentItem: notesData.items[index]);
-      }
-    }
-    if (notesData.items.length.isOdd && prevIndex != index) {
-      return SmallCard(currentItem: notesData.items[index]);
-    }
-    return const SizedBox();
   }
 }
