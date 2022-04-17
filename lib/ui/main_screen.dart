@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../icon/pin_icons.dart';
 import '../providers/notes.dart';
 import './widgets/build_notes.dart';
+import './widgets/my_modal_bottom_sheet.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -59,8 +60,6 @@ class MyFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuerySize = MediaQuery.of(context).size;
-    var inputTextController = TextEditingController();
     return FloatingActionButton.large(
       onPressed: () {
         showModalBottomSheet(
@@ -71,54 +70,10 @@ class MyFAB extends StatelessWidget {
             ),
           ),
           context: context,
-          builder: (BuildContext context) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: SizedBox(
-                height: mediaQuerySize.width * 0.3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: mediaQuerySize.width * 0.8,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'New note',
-                        ),
-                        controller: inputTextController,
-                        onFieldSubmitted: (String? value) {
-                          if (value!.isNotEmpty) {
-                            Provider.of<Notes>(context, listen: false)
-                                .addNote(value);
-                            Provider.of<Notes>(context, listen: false)
-                                .fetchData(false);
-                          }
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: mediaQuerySize.width * 0.5,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (inputTextController.text.isNotEmpty) {
-                            Provider.of<Notes>(context, listen: false)
-                                .addNote(inputTextController.text);
-                            Provider.of<Notes>(context, listen: false)
-                                .fetchData(false);
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Add note',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          builder: (BuildContext ctx) {
+            return const MyModalBottomSheet(
+              isInputText: true,
+              currentItem: null,
             );
           },
         );

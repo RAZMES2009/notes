@@ -7,7 +7,6 @@ import '../helpers/db_helper.dart';
 
 class Notes with ChangeNotifier {
   List<Note> _items = [];
-  Map<String, dynamic> data = {};
 
   List<Note> get items {
     return [..._items];
@@ -34,7 +33,6 @@ class Notes with ChangeNotifier {
 
   Future<void> fetchData(bool onlyPinned) async {
     final dataList = await DBHelper.getData('notes');
-    print(dataList.where((el) => el['pin'] == 1));
     if (onlyPinned) {
       _items = dataList
           .where((el) => el['pin'] == 1)
@@ -48,7 +46,6 @@ class Notes with ChangeNotifier {
             ),
           )
           .toList();
-      print(_items);
     } else {
       _items = dataList
           .map(
@@ -71,6 +68,11 @@ class Notes with ChangeNotifier {
     DBHelper.clearDb();
   }
 
+  void deleteNote(Note note) {
+    _items.remove(note);
+    DBHelper.removeItemDb(note.id.toIso8601String());
+  }
+
   void setPin(int index) {
     items[index].pinned = !items[index].pinned;
 
@@ -81,7 +83,6 @@ class Notes with ChangeNotifier {
       'pin': items[index].pinned == true ? 1 : 0,
       'color': items[index].color,
     };
-
     DBHelper.updateDb(
       data,
       _items[index].id.toIso8601String(),

@@ -30,16 +30,16 @@ class DBHelper {
 
   static Future<void> updateDb(Map<String, Object> data, String id) async {
     final db = await DBHelper.database();
-    db.update(
-      'notes',
-      data,
-      where: 'id = ?',
-      whereArgs: [data['id']]
-    );
+    db.update('notes', data, where: 'id = ?', whereArgs: [data['id']]);
   }
 
   static Future<void> clearDb() async {
     final db = await DBHelper.database();
     db.delete('notes');
+  }
+
+  static Future<void> removeItemDb(String id) async {
+    final db = await DBHelper.database();
+    db.rawDelete('DELETE FROM notes WHERE id = ?', [id]);
   }
 }
