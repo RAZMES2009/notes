@@ -91,7 +91,7 @@ class MyFAB extends StatelessWidget {
                             Provider.of<Notes>(context, listen: false)
                                 .addNote(value);
                             Provider.of<Notes>(context, listen: false)
-                                .fetchData();
+                                .fetchData(false);
                           }
                           Navigator.pop(context);
                         },
@@ -105,7 +105,7 @@ class MyFAB extends StatelessWidget {
                             Provider.of<Notes>(context, listen: false)
                                 .addNote(inputTextController.text);
                             Provider.of<Notes>(context, listen: false)
-                                .fetchData();
+                                .fetchData(false);
                           }
                           Navigator.pop(context);
                         },
@@ -143,7 +143,10 @@ class BottomNavigation extends StatelessWidget {
           onTap: (int index) {
             if (index == 0) {
               notesFunctions.deleteAllNotes();
-              notesFunctions.fetchData();
+              notesFunctions.fetchData(false);
+            }
+            if (index == 1) {
+              notesFunctions.fetchData(true);
             }
           },
           backgroundColor: Theme.of(context).colorScheme.secondary,

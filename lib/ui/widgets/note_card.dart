@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/providers/notes.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/note.dart';
 import '../../icon/pin_icons.dart';
 
 class NoteCard extends StatefulWidget {
-  final Note currentItem;
+  final int index;
   const NoteCard({
     Key? key,
-    required this.currentItem,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -16,17 +17,10 @@ class NoteCard extends StatefulWidget {
 }
 
 class _NoteCardState extends State<NoteCard> {
-  void changePin() {
-    print(widget.currentItem.pinned);
-    setState(() {
-      widget.currentItem.pinned = widget.currentItem.pinned;
-    });
-    print(widget.currentItem.pinned);
-  }
-
   @override
   Widget build(BuildContext context) {
-    Color colorCard = widget.currentItem.color == 1
+    final notesData = Provider.of<Notes>(context, listen: false);
+    Color colorCard = notesData.items[widget.index].color == 1
         ? Theme.of(context).colorScheme.secondary
         : Theme.of(context).colorScheme.tertiary;
     final mediaQuerySize = MediaQuery.of(context).size;
@@ -54,32 +48,38 @@ class _NoteCardState extends State<NoteCard> {
               children: [
                 SizedBox(
                   width: mediaQuerySize.width * 0.25,
-                  height: mediaQuerySize.width * 0.1,
+                  height: mediaQuerySize.width * 0.12,
                   child: Text(
-                    widget.currentItem.text,
+                    notesData.items[widget.index].text,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                     ),
                   ),
                 ),
-                widget.currentItem.pinned
+                notesData.items[widget.index].pinned
                     ? IconButton(
                         padding: const EdgeInsets.only(left: 20, top: 5),
                         alignment: Alignment.topCenter,
-                        onPressed: () => changePin,
+                        onPressed: () => setState(() {
+                          notesData.setPin(widget.index);
+                        }),
                         icon: const Icon(
                           PinIcons.my_pin_fill,
                           size: 14,
+                          color: Color.fromRGBO(242, 116, 5, 1),
                         ),
                       )
                     : IconButton(
                         padding: const EdgeInsets.only(left: 20, top: 5),
                         alignment: Alignment.topCenter,
-                        onPressed: () => changePin,
+                        onPressed: () => setState(() {
+                          notesData.setPin(widget.index);
+                        }),
                         icon: const Icon(
                           PinIcons.my_pin_outlined,
                           size: 14,
+                          color: Color.fromRGBO(242, 116, 5, 1),
                         ),
                       ),
               ],
@@ -99,7 +99,8 @@ class _NoteCardState extends State<NoteCard> {
                       width: mediaQuerySize.width * 0.2,
                     ),
                     Text(
-                      DateFormat.MMMMd().format(widget.currentItem.time),
+                      DateFormat.MMMMd()
+                          .format(notesData.items[widget.index].time),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
