@@ -34,20 +34,21 @@ class Notes with ChangeNotifier {
 
   Future<void> fetchData(bool onlyPinned) async {
     final dataList = await DBHelper.getData('notes');
+    print(dataList.where((el) => el['pin'] == 1));
     if (onlyPinned) {
-      print(dataList.where((el) => el['pin'] == 1));
       _items = dataList
-          .where((el) => el['pin'] == true)
+          .where((el) => el['pin'] == 1)
           .map(
             (item) => Note(
               id: DateTime.tryParse(item['id'])!,
               text: item['text'],
               time: DateTime.tryParse(item['time'])!,
-              pinned: item['pin'] = true,
+              pinned: item['pin'] == 0 ? false : true,
               color: item['color'],
             ),
           )
           .toList();
+      print(_items);
     } else {
       _items = dataList
           .map(

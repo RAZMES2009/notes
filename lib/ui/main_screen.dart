@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../icon/pin_icons.dart';
 import '../providers/notes.dart';
 import './widgets/build_notes.dart';
 
@@ -127,13 +128,19 @@ class MyFAB extends StatelessWidget {
   }
 }
 
-class BottomNavigation extends StatelessWidget {
+class BottomNavigation extends StatefulWidget {
   const BottomNavigation({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<BottomNavigation> createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  @override
   Widget build(BuildContext context) {
+    bool onlyPinned = false;
     final notesFunctions = Provider.of<Notes>(context, listen: false);
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
@@ -143,10 +150,11 @@ class BottomNavigation extends StatelessWidget {
           onTap: (int index) {
             if (index == 0) {
               notesFunctions.deleteAllNotes();
-              notesFunctions.fetchData(false);
+              notesFunctions.fetchData(onlyPinned);
             }
             if (index == 1) {
-              notesFunctions.fetchData(true);
+              onlyPinned = !onlyPinned;
+              notesFunctions.fetchData(!onlyPinned);
             }
           },
           backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -169,8 +177,8 @@ class BottomNavigation extends StatelessWidget {
               icon: Padding(
                 padding: EdgeInsets.only(left: 55),
                 child: Icon(
-                  Icons.more_vert,
-                  size: 45,
+                  PinIcons.my_pin_fill,
+                  size: 30,
                 ),
               ),
               label: '',

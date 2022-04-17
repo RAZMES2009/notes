@@ -43,8 +43,6 @@ class _BuldNotesState extends State<BuldNotes> {
                                     mainAxisSpacing: 10),
                             itemCount: notesData.items.length,
                             itemBuilder: ((c, index) {
-                              print(notesData.items[index].pinned);
-                              print(index);
                               return NoteCard(
                                 index: index,
                               );
